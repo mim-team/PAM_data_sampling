@@ -12,8 +12,6 @@ print(DEVICE)
 print( torch.cuda.device_count())
 print(torch.version.cuda)
 
-stop 
-
 with open('config.yaml', 'r') as file: # load yaml config
     CONFIG = yaml.safe_load(file)
 
@@ -55,5 +53,3 @@ if __name__ == "__main__":
     #save results
     with open(os.path.join(CONFIG["data_path"],"results_samples_revcor.pkl"), "wb") as file:
         pickle.dump([sampling_vect_list, mAP_list, cmAP_list , class_AP_list] ,file)
-
-    plt.show()

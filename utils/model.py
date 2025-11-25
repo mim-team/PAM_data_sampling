@@ -300,5 +300,6 @@ def sampling_strategy_evaluation(x_train_sampling, y_train_sampling, x_val, y_va
         plt.ylabel('Loss')
         plt.title('Training and Validation Loss')
         plt.legend()
+        plt.show()
 
     return mAP, cmAP, class_AP

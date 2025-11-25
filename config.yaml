@@ -7,4 +7,4 @@ bird_list_wabad: ['Acrocephalus arundinaceus', 'Acrocephalus scirpaceus', 'Alaud
  
 sample_num: 500 # max: 13453
 
-iter_num: 10 #10000
+iter_num: 3 #10000
