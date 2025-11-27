@@ -5,15 +5,31 @@ import pickle
 from tqdm import tqdm
 import yaml
 import torch
-from utils.model import load_bird_list, load_birdnet_weights, import_dataset, data_random_sampling, sampling_strategy_evaluation
+from utils.model import load_bird_list, load_birdnet_weights, import_dataset, sampling_strategy_evaluation
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)
-print( torch.cuda.device_count())
-print(torch.version.cuda)
 
 with open('config.yaml', 'r') as file: # load yaml config
     CONFIG = yaml.safe_load(file)
+
+
+def data_random_sampling(x_train, y_train, samples_num, proba_vect):
+    # random samplin of "samples_num" samples in the train set, with probabilities in proba_vect
+
+    idx_train_samples = np.arange(np.shape(x_train)[0])
+    proba_vect_samples = proba_vect[idx_train_samples]/np.sum(proba_vect[idx_train_samples])
+
+    idx_train_selection = np.random.choice(idx_train_samples, size=samples_num, p=proba_vect_samples, replace=False)
+
+    x_train_sampling = x_train[idx_train_selection,:]
+    y_train_sampling = y_train[idx_train_selection,:]    
+
+    sampling_vect = np.zeros(np.shape(x_train)[0])
+    sampling_vect[idx_train_selection] = 1
+
+    return x_train_sampling, y_train_sampling, sampling_vect
+
 
 
 if __name__ == "__main__":
@@ -51,5 +67,5 @@ if __name__ == "__main__":
     class_AP_list = np.array(class_AP_list)
     
     #save results
-    with open(os.path.join(CONFIG["data_path"],"results_samples_revcor.pkl"), "wb") as file:
+    with open(os.path.join(CONFIG["results_path"],"results_samples_revcor.pkl"), "wb") as file:
         pickle.dump([sampling_vect_list, mAP_list, cmAP_list , class_AP_list] ,file)

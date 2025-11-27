@@ -1,10 +1,24 @@
-data_path: "data/"
+dataset_path: "dataset/"
+results_path: "results/"
 
 sample_rate: 48000
 
 # List of european species that occure in at least one 1-minute files in both train and test sets in WABAD(curruca cantillans removed)
 bird_list_wabad: ['Acrocephalus arundinaceus', 'Acrocephalus scirpaceus', 'Alauda arvensis', 'Alectoris chukar', 'Anas platyrhynchos', 'Anthus pratensis', 'Anthus trivialis', 'Ardea cinerea', 'Athene noctua', 'Burhinus oedicnemus', 'Calandrella brachydactyla', 'Carduelis carduelis', 'Certhia brachydactyla', 'Cettia cetti', 'Chloris chloris', 'Chroicocephalus ridibundus', 'Circus aeruginosus', 'Cisticola juncidis', 'Coccothraustes coccothraustes', 'Columba oenas', 'Columba palumbus', 'Corvus corax', 'Corvus cornix', 'Corvus corone', 'Corvus monedula', 'Cuculus canorus', 'Curruca communis', 'Curruca conspicillata', 'Curruca iberiae', 'Curruca melanocephala', 'Curruca undata', 'Cyanistes caeruleus', 'Cyanopica cooki', 'Dendrocopos major', 'Dendrocoptes medius', 'Dryocopus martius', 'Emberiza calandra', 'Emberiza cia', 'Emberiza cirlus', 'Emberiza citrinella', 'Erithacus rubecula', 'Falco tinnunculus', 'Ficedula albicollis', 'Fringilla coelebs', 'Fringilla montifringilla', 'Fulica atra', 'Galerida cristata', 'Galerida theklae', 'Gallinula chloropus', 'Gallus gallus', 'Garrulus glandarius', 'Grus grus', 'Himantopus himantopus', 'Hippolais polyglotta', 'Lanius senator', 'Larus argentatus', 'Linaria cannabina', 'Locustella naevia', 'Lophophanes cristatus', 'Lullula arborea', 'Luscinia megarhynchos', 'Merops apiaster', 'Milvus migrans', 'Motacilla flava', 'Oriolus oriolus', 'Parus major', 'Passer domesticus', 'Periparus ater', 'Petronia petronia', 'Phasianus colchicus', 'Phoenicopterus roseus', 'Phoenicurus ochruros', 'Phylloscopus bonelli', 'Phylloscopus collybita', 'Phylloscopus sibilatrix', 'Phylloscopus trochilus', 'Pica pica', 'Picus sharpei', 'Poecile palustris', 'Prunella collaris', 'Prunella modularis', 'Pyrrhocorax pyrrhocorax', 'Pyrrhula pyrrhula', 'Rallus aquaticus', 'Recurvirostra avosetta', 'Regulus ignicapilla', 'Regulus regulus', 'Remiz pendulinus', 'Saxicola rubetra', 'Saxicola rubicola', 'Serinus serinus', 'Sitta europaea', 'Spinus spinus', 'Streptopelia decaocto', 'Sturnus unicolor', 'Sylvia atricapilla', 'Tachybaptus ruficollis', 'Tadorna ferruginea', 'Tadorna tadorna', 'Tringa glareola', 'Tringa ochropus', 'Troglodytes troglodytes', 'Turdus merula', 'Turdus philomelos', 'Turdus viscivorus', 'Upupa epops']
  
-sample_num: 500 # max: 13453
+# number os samples in the fine-tuning set
+sample_num: 500 
 
+
+# reverse correlation parameters
 iter_num: 3 #10000
+
+
+# sampling strategy evaluation parameters
+bird_sample_prop : 0.10 #proportion of samples with birds. Used to upsample samples with environmental noise from ESC50 
+iter_per_condition : 2
+sampling_parameters : ["BirdNETmax", "Entropy_mean", "Entropy_max", "AEI", "BI", "LEQf", "nROI", "TFSD", "MEANf", "EAS", "EPS_SKEW", "ACI", "NDSI"]
+
+sampling_parameter_min  : [0.0017527734712833934, 0.00043962741815542017, 0.008380822877860676, 0.001576576576576394, 5.111066485463326, 23.431891043164526, 0.0, 0.0, 3.383501439361831e-05, 0.0005480359736982701, 0.5, 292.45259020464556, -0.9898877773198995]
+sampling_parameter_max  : [0.9409695161829692, 0.03546467060652349, 0.9905407548338927, 0.7695945945945949, 92.36474722381885, 73.37630051510337, 57.286639317889325, 0.5825256977711354, 0.0033728675776952734, 0.4790983710433095, 384.00000678168385, 474.69733902756514, 0.7916774509189366]
+

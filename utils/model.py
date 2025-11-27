@@ -30,7 +30,7 @@ with open('config.yaml', 'r') as file: # load yaml config
 
 def load_bird_list():
      # load birdnet indices for species in WABAD 
-    birdnet_all_labels = Path(os.path.join(CONFIG["data_path"], "BirdNET_GLOBAL_6K_V2.4_Labels.txt")).read_text(encoding="utf-8").splitlines()
+    birdnet_all_labels = Path(os.path.join(CONFIG["dataset_path"], "BirdNET_GLOBAL_6K_V2.4_Labels.txt")).read_text(encoding="utf-8").splitlines()
     all_latin_labels = [item.split('_')[0] for item in birdnet_all_labels]
     bird_list_index = [all_latin_labels.index(specie_name) for specie_name in CONFIG["bird_list_wabad"]]
     num_class =  len(bird_list_index)
@@ -39,7 +39,7 @@ def load_bird_list():
 
 def load_birdnet_weights(bird_list_index): 
     #Load weights of pretrained birdNET last layer
-    with open(os.path.join(CONFIG["data_path"], "birdnet_last_layer.pkl"), "rb") as file:
+    with open(os.path.join(CONFIG["dataset_path"], "birdnet_last_layer.pkl"), "rb") as file:
         loaded_data = pickle.load(file)
     [birdnet_weights, birdnet_bias] = loaded_data
     birdnet_weights = birdnet_weights[bird_list_index,:]
@@ -50,7 +50,7 @@ def load_birdnet_weights(bird_list_index):
 def import_dataset(bird_list_index): 
     # load full train, val, test sets of WABAD (european species)
 
-    dataset_path = CONFIG["data_path"]
+    dataset_path = CONFIG["dataset_path"]
 
     # load train labels and sampling data
     with open(os.path.join(dataset_path, "dataframe_train.pkl"), "rb") as file:
@@ -124,22 +124,6 @@ def import_dataset(bird_list_index):
     return x_train, y_train, x_val, y_val, x_test, y_test, samples_df_train, birdnet_scores_train, wabad_train_set_size, esc50_set_size
 
 
-
-def data_random_sampling(x_train, y_train, samples_num, proba_vect):
-    # random samplin of "samples_num" samples in the train set, with probabilities in proba_vect
-
-    idx_train_samples = np.arange(np.shape(x_train)[0])
-    proba_vect_samples = proba_vect[idx_train_samples]/np.sum(proba_vect[idx_train_samples])
-
-    idx_train_selection = np.random.choice(idx_train_samples, size=samples_num, p=proba_vect_samples, replace=False)
-
-    x_train_sampling = x_train[idx_train_selection,:]
-    y_train_sampling = y_train[idx_train_selection,:]    
-
-    sampling_vect = np.zeros(np.shape(x_train)[0])
-    sampling_vect[idx_train_selection] = 1
-
-    return x_train_sampling, y_train_sampling, sampling_vect
 
 
 
