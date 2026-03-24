@@ -45,7 +45,7 @@ if __name__ == "__main__":
     sampling_vect_list = []
     mAP_list = []
     cmAP_list = []
-    class_AP_list = []
+
 
     for i in tqdm(range(CONFIG["iter_num"])):
         # data sampling : random selection of "sample_num" samples in the train set
@@ -57,15 +57,13 @@ if __name__ == "__main__":
         sampling_vect_list.append(sampling_vect)
         mAP_list.append(mAP)
         cmAP_list.append(cmAP)
-        class_AP_list.append(np.array(class_AP))
         print(f"params = {i}, mAP = {mAP:.3f}, cmAP = {cmAP:.3f}" )
 
 
     sampling_vect_list = np.array(sampling_vect_list)
     mAP_list = np.array(mAP_list)
     cmAP_list = np.array(cmAP_list)
-    class_AP_list = np.array(class_AP_list)
     
     #save results
-    with open(os.path.join(CONFIG["results_path"],"results_samples_revcor.pkl"), "wb") as file:
-        pickle.dump([sampling_vect_list, mAP_list, cmAP_list , class_AP_list] ,file)
+    with open(os.path.join(CONFIG["results_path"],"results_samples_revcor_new.pkl"), "wb") as file:
+        pickle.dump([sampling_vect_list, cmAP_list ] ,file)

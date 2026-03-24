@@ -10,15 +10,36 @@ bird_list_wabad: ['Acrocephalus arundinaceus', 'Acrocephalus scirpaceus', 'Alaud
 sample_num: 500 
 
 
-# reverse correlation parameters
-iter_num: 3 #10000
+# reverse correlation parameters, used in run_reverse_correlation.py
+iter_num: 3 # 20000 in the paper
 
 
-# sampling strategy evaluation parameters
+# sampling strategy evaluation parameters, used in run_sampling_evaluation.py
 bird_sample_prop : 0.10 #proportion of samples with birds. Used to upsample samples with environmental noise from ESC50 
-iter_per_condition : 2
+iter_per_condition : 2 #400 in the paper
 sampling_parameters : ["BirdNETmax", "Entropy_mean", "Entropy_max", "AEI", "BI", "LEQf", "nROI", "TFSD", "MEANf", "EAS", "EPS_SKEW", "ACI", "NDSI"]
 
 sampling_parameter_min  : [0.0017527734712833934, 0.00043962741815542017, 0.008380822877860676, 0.001576576576576394, 5.111066485463326, 23.431891043164526, 0.0, 0.0, 3.383501439361831e-05, 0.0005480359736982701, 0.5, 292.45259020464556, -0.9898877773198995]
 sampling_parameter_max  : [0.9409695161829692, 0.03546467060652349, 0.9905407548338927, 0.7695945945945949, 92.36474722381885, 73.37630051510337, 57.286639317889325, 0.5825256977711354, 0.0033728675776952734, 0.4790983710433095, 384.00000678168385, 474.69733902756514, 0.7916774509189366]
 
+
+
+
+# best threshold value for each sampling parameter [sign (for > or <), value], used in compare_best_strategies.ipynb
+thresh_opt_cmAP : {'Random': [ 0, 0], 
+                  'TFSD': [ 1 , 0.5398778909041585], 
+                  'LEQf': [-1 , 42.50641926227747], 
+                  'NDSI': [ 1 , -0.015977607726162635], 
+                  'AEI': [ -1 , 0.03928857363022976],
+                  'BI': [-1 , 10.554897597048377], 
+                  'MEANf': [ -1 , 0.00021200235341107735], 
+                  'EPS_SKEW': [ -1 , 2.901448325074554], 
+                  'EAS': [-1, 0.038163744817480215], 
+                  'nROI': [-1, 11.592678051017025], 
+                  'ACI': [-1, 308.0529653196328], 
+                  'BirdNETmax': [1, 0.08865592035069979], 
+                  'Entropy_mean': [1, 0.01080812712360521], 
+                  'Entropy_max': [1, 0.6517773362755245]}
+
+
+#thresh_opt_cmAP : {'TFSD': [np.float64(0.5398778909041585), np.float64(0.6085142379463012)], 'LEQf': [np.float64(24.34059694238948), np.float64(42.50641926227747)], 'NDSI': [np.float64(-0.015977607726162635), np.float64(0.9698339737428201)], 'AEI': [np.float64(-1.7694179454963432e-16), np.float64(0.03928857363022976)], 'BI': [np.float64(1.8293326822916667), np.float64(10.554897597048377)], 'MEANf': [np.float64(0.0), np.float64(0.00021200235341107735)], 'EPS_SKEW': [np.float64(0.9219649798569616), np.float64(2.901448325074554)], 'EAS': [np.float64(1.3215073813022116e-08), np.float64(0.038163744817480215)], 'nROI': [np.float64(0.0), np.float64(11.592678051017025)], 'ACI': [np.float64(284.0699700711145), np.float64(308.0529653196328)], 'BirdNETmax': [np.float64(0.08865592035069979), np.float64(0.9939740674151136)], 'Entropy_mean': [np.float64(0.01080812712360521), np.float64(0.036954373692778826)], 'Entropy_max': [np.float64(0.6517773362755245), np.float64(0.9881015481763779)]}

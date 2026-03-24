@@ -10,9 +10,7 @@ import torchvision.transforms as transforms
 #from torchsummary import summary
 from torch.utils.data import TensorDataset, DataLoader
 #from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import average_precision_score 
-#from sklearn.metrics import roc_auc_score
-#from sklearn.metrics import roc_curve, auc 
+from sklearn.metrics import average_precision_score , roc_auc_score, f1_score
 #from sklearn.model_selection import train_test_split
 #from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 from pathlib import Path
@@ -88,7 +86,8 @@ def import_dataset(bird_list_index):
 
     y_true_test = y_true_test.astype(int)
     y_true_test = y_true_test[:,bird_list_index]
- 
+    y_scores_test = y_scores_test[:,bird_list_index]
+
     #Load test embeddings
     with open(os.path.join(dataset_path, "embeddings_test.pkl"), "rb") as file:
         loaded_data = pickle.load(file)
@@ -121,7 +120,7 @@ def import_dataset(bird_list_index):
     x_test = embeddings_test
     y_test = y_true_test
 
-    return x_train, y_train, x_val, y_val, x_test, y_test, samples_df_train, birdnet_scores_train, wabad_train_set_size, esc50_set_size
+    return x_train, y_train, x_val, y_val, x_test, y_test, y_scores_test, samples_df_train, birdnet_scores_train, wabad_train_set_size, esc50_set_size
 
 
 
@@ -287,3 +286,69 @@ def sampling_strategy_evaluation(x_train_sampling, y_train_sampling, x_val, y_va
         plt.show()
 
     return mAP, cmAP, class_AP
+
+
+
+
+
+def sampling_strategy_evaluation_all_metrics(x_train_sampling, y_train_sampling, x_val, y_val, x_test, y_test, num_class,  birdnet_weights, birdnet_bias, display=False ):
+    # one reverse correlation iteration: model creation, model training, model evaluation
+
+    train_loader, val_loader, test_loader = prepare_data(x_train_sampling, y_train_sampling, x_val, y_val, x_test, y_test, batch_size=32)
+
+    input_dim = x_train_sampling.shape[1]
+
+    model = ClassificationHead(input_size=input_dim, output_size=num_class, weight_matrix=birdnet_weights, bias_vector=birdnet_bias).to(DEVICE)
+
+    criterion = nn.BCEWithLogitsLoss()
+
+    #best params 500 samples
+    optimizer = optim.Adam(model.parameters(), lr=0.0001) 
+    num_epochs = 150
+
+    model, train_losses, val_losses = train_model(train_loader, val_loader, num_epochs, model, optimizer, criterion, birdnet_weights, birdnet_bias, lambda_reg=0.00032)
+
+    y_scores_test = model_inference(test_loader, model, criterion)
+
+
+    class_AP = average_precision_score(y_test, y_scores_test, average=None, sample_weight=None)
+    weighted_AP = average_precision_score(y_test, y_scores_test, average="weighted", sample_weight=None)
+    cmAP  = average_precision_score(y_test, y_scores_test , average="macro", sample_weight=None)
+    micro_AP = average_precision_score(y_test, y_scores_test, average="micro", sample_weight=None)
+    
+    class_roc_auc = roc_auc_score(y_test, y_scores_test, average=None)
+    weighted_roc_auc = roc_auc_score(y_test, y_scores_test, average='weighted')
+    macro_roc_auc = roc_auc_score(y_test, y_scores_test, average='macro')
+    micro_roc_auc = roc_auc_score(y_test, y_scores_test, average='macro')
+
+    #roc_auc_score(y_test, y_pred_test, average='micro')
+
+    y_pred_test = y_scores_test > 0.5
+    weighted_f1 = f1_score(y_test, y_pred_test, average='weighted')
+    micro_f1 = f1_score(y_test, y_pred_test, average='macro')
+    macro_f1 = f1_score(y_test, y_pred_test, average='macro')
+
+    metrics_df = pd.DataFrame({"cmAP": [cmAP],
+                             "macro_roc_auc": [macro_roc_auc]})
+    
+    per_class_metrics_df = pd.DataFrame({"class_AP": [class_AP],
+                             "class_roc_auc": [class_roc_auc]})
+
+    #metrics_df = pd.DataFrame({"cmAP": [cmAP], "weighted_AP":[weighted_AP], "micro_AP":[micro_AP],   "class_AP":[class_AP] ,
+                             #"macro_roc_auc": [macro_roc_auc],  "weighted_roc_auc": [weighted_roc_auc], "micro_roc_auc": [micro_roc_auc],
+                             #"macro_f1": [macro_f1], "weighted_f1": [weighted_f1], "micro_f1": [micro_f1] })
+
+
+    if display==True:
+        epochs_range = range(1, num_epochs + 1)
+        plt.figure(figsize=(12, 6))
+        plt.plot(epochs_range, train_losses, label='Train Loss')
+        plt.plot(epochs_range, val_losses, label='Validation Loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Training and Validation Loss')
+        plt.legend()
+        plt.show()
+
+
+    return metrics_df, per_class_metrics_df
