@@ -5,6 +5,8 @@ Authors: Corentin Bernard, Ben McEwen, Benjamin Cretois, Hervé Glotin, Dan Stow
 
 This work is part of the [TABMON](https://tabmon-eu.nina.no/) project.
 
+Formatted dataset and intermediate computation files can be downloaded on [ZENODO](https://doi.org/10.5281/zenodo.19206665).
+
 Annotated data comes from the [WABAD](https://zenodo.org/records/14191524) dataset. Only European sites have been retained.
 Pre-processed data in 'dataset\' contains WABAD data cut into 3 sec samples and split into train, validation and test.
 The .pkl files contain birdNET embeddings (x), and true labels (y), as well as dataframes with [BirdNET](https://github.com/birdnet-team/BirdNET-Analyzer) confidence score, uncertainty (binary entropy of the predictions) and [acoustic indices](https://scikit-maad.github.io/).
