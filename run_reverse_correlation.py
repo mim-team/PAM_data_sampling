@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     birdnet_weights, birdnet_bias = load_birdnet_weights(bird_list_index) # load birdnet last layer weights
 
-    x_train, y_train, x_val, y_val, x_test, y_test, _ , _,  _, _ = import_dataset(bird_list_index) # load train, val and test set
+    x_train, y_train, x_val, y_val, x_test, y_test, _, _ , _,  _, _ = import_dataset(bird_list_index) # load train, val and test set
     
     proba_vect = np.ones(np.shape(x_train)[0]) # equal drawing probabilities for each sample
 
