@@ -15,7 +15,7 @@ iter_num: 100 # 20000 in the paper
 
 
 # sampling strategy evaluation parameters, used in run_sampling_evaluation.py
-bird_sample_prop : 0.10 #proportion of samples with birds. Used to upsample samples with environmental noise from ESC50 
+bird_sample_prop : 0.10 #proportion of samples with birds. Used to upsample samples with environmental noise from ESC50. 0.10 in the paper
 iter_per_condition : 10 #400 in the paper
 sampling_parameters : ["BirdNETmax", "Entropy_mean", "Entropy_max", "AEI", "BI", "LEQf", "nROI", "TFSD", "MEANf", "EAS", "EPS_SKEW", "ACI", "NDSI"]
 

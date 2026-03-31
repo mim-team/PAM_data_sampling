@@ -81,7 +81,7 @@ if __name__ == "__main__":
     for i in tqdm(range(iter_num)):
         
         param_threshold = param_thresholds_plan[i]
-        x_train_sampling, y_train_sampling, sampling_done = data_sampling(x_train, y_train, CONFIG["sample_num"] , param_threshold , samples_df_train, proba_vect)
+        x_train_sampling, y_train_sampling, sampling_done, _ = data_sampling(x_train, y_train, CONFIG["sample_num"] , param_threshold , samples_df_train, proba_vect)
 
 
         if sampling_done == True:

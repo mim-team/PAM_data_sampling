@@ -38,11 +38,15 @@ def data_sampling(x_train, y_train, samples_num, param_thresholds, samples_df_tr
         proba_vect_samples = proba_vect[idx_train_samples]/np.sum(proba_vect[idx_train_samples])
         idx_train_selection = np.random.choice(idx_train_samples, size=samples_num, p=proba_vect_samples, replace=False)
         x_train_sampling = x_train[idx_train_selection,:]
-        y_train_sampling = y_train[idx_train_selection,:]    
+        y_train_sampling = y_train[idx_train_selection,:]  
+   
+        bird_proportion = np.sum(np.sum(y_train_sampling,axis=1) >= 1) / samples_num
+
+        
     else:
         #print(f"Error : less than {samples_num:.0f} samples in the selection" )
         sampling_done = False
         x_train_sampling = 0
         y_train_sampling = 0
 
-    return x_train_sampling, y_train_sampling, sampling_done
+    return x_train_sampling, y_train_sampling, sampling_done, bird_proportion
