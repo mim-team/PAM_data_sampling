@@ -1,5 +1,5 @@
 # PAM_data_sampling
-Scripts and data supporting the paper ["Data-driven Sampling Strategies for Fine-Tuning Bird Detection Models"]([https://www.biorxiv.org/content/10.1101/2025.10.02.679964v1](https://pubs.aip.org/asa/jasa/article/159/6/4891/3393438/Data-driven-sampling-strategies-for-fine-tuning))
+Scripts and data supporting the paper ["Data-driven Sampling Strategies for Fine-Tuning Bird Detection Models"](https://pubs.aip.org/asa/jasa/article/159/6/4891/3393438/Data-driven-sampling-strategies-for-fine-tuning).
 
 Authors: Corentin Bernard, Ben McEwen, Benjamin Cretois, Hervé Glotin, Dan Stowell, Ricard Marxer.
 
